@@ -23,7 +23,8 @@ You can reopen it any time: `about:addons` → **Send to MeTube** → **Options*
 ## Install
 
 ### Single-file package (recommended)
-Grab the `.xpi` from the repo's Releases, or build it:
+Grab `send-to-metube.xpi` from the [Releases](../../releases) page (built
+automatically by CI on each `v*` tag), or build it locally:
 
 ```sh
 zip -r -FS ../send-to-metube.xpi . -x '*.git*' 'README.md' 'build.sh'

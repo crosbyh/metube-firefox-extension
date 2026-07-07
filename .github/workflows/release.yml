@@ -1,0 +1,52 @@
+name: Release
+
+# Build the extension and attach the .xpi to a GitHub Release whenever a
+# version tag (e.g. v1.1) is pushed.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Promote secrets to env so steps can gate on them via the env context
+    # (the secrets context isn't available in step-level `if`).
+    env:
+      AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+      AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Package the extension: a zip with manifest.json at the root, named .xpi.
+      - name: Build unsigned .xpi
+        run: |
+          zip -r -FS send-to-metube.xpi . \
+            -x '.git*' '.github/*' 'README.md' 'build.sh' '*.xpi' '*.zip'
+          unzip -l send-to-metube.xpi
+
+      # Optional: if AMO credentials are configured as repo secrets, produce a
+      # Firefox-signed .xpi (installable on release Firefox). Skipped otherwise.
+      - name: Sign with AMO (optional)
+        if: ${{ env.AMO_JWT_ISSUER != '' && env.AMO_JWT_SECRET != '' }}
+        run: |
+          npx --yes web-ext@latest sign \
+            --channel=unlisted \
+            --api-key="$AMO_JWT_ISSUER" \
+            --api-secret="$AMO_JWT_SECRET" \
+            --source-dir=. \
+            --ignore-files README.md build.sh 'send-to-metube.xpi' \
+            --artifacts-dir=signed
+          cp signed/*.xpi send-to-metube-signed.xpi
+
+      - name: Create release and upload assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            ./*.xpi
