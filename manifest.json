@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Send to MeTube",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Right-click a page, link, or video to send it to your MeTube instance for download.",
 
   "browser_specific_settings": {
@@ -27,7 +27,7 @@
 
   "options_ui": {
     "page": "options.html",
-    "open_in_tab": true
+    "open_in_tab": false
   },
 
   "icons": {
