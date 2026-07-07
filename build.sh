@@ -6,5 +6,5 @@ cd "$(dirname "$0")"
 out="../send-to-metube.xpi"
 rm -f "$out"
 zip -r -FS "$out" . \
-  -x '*.git*' 'README.md' 'build.sh' '*.xpi' '*.zip' 'web-ext-artifacts/*'
+  -x '*.git*' 'README.md' 'CLAUDE.md' 'build.sh' '*.xpi' '*.zip' 'web-ext-artifacts/*'
 echo "Built $out"

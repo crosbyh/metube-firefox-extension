@@ -21,11 +21,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The git tag is the single source of truth for the version. Stamp it into
+      # manifest.json before building so the released/signed package matches the
+      # tag (AMO requires a unique, incrementing version per upload).
+      - name: Set version from tag
+        run: |
+          v="${GITHUB_REF_NAME#v}"          # v1.4 -> 1.4
+          sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$v\"/" manifest.json
+          grep '"version"' manifest.json
+
       # Package the extension: a zip with manifest.json at the root, named .xpi.
       - name: Build unsigned .xpi
         run: |
           zip -r -FS send-to-metube.xpi . \
-            -x '.git*' '.github/*' 'README.md' 'build.sh' '*.xpi' '*.zip'
+            -x '.git*' '.github/*' 'README.md' 'CLAUDE.md' 'build.sh' '*.xpi' '*.zip'
           unzip -l send-to-metube.xpi
 
       # Optional: if AMO credentials are configured as repo secrets, produce a
@@ -38,7 +47,7 @@ jobs:
             --api-key="$AMO_JWT_ISSUER" \
             --api-secret="$AMO_JWT_SECRET" \
             --source-dir=. \
-            --ignore-files README.md build.sh 'send-to-metube.xpi' \
+            --ignore-files README.md CLAUDE.md build.sh 'send-to-metube.xpi' \
             --artifacts-dir=signed
           cp signed/*.xpi send-to-metube-signed.xpi
 
