@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Send to MeTube — Options</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font: 14px/1.5 system-ui, sans-serif;
+      max-width: 30rem;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1 { font-size: 1.2rem; }
+    label { display: block; font-weight: 600; margin-bottom: .35rem; }
+    input[type="url"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: .5rem;
+      font: inherit;
+    }
+    .hint { color: gray; margin: .35rem 0 1rem; }
+    button {
+      font: inherit;
+      padding: .5rem 1rem;
+      cursor: pointer;
+    }
+    #status { margin-left: .75rem; }
+    .ok { color: green; }
+    .err { color: #c0392b; }
+  </style>
+</head>
+<body>
+  <h1>Send to MeTube</h1>
+
+  <label for="instance">MeTube instance URL</label>
+  <input id="instance" type="url" placeholder="https://metube.example.com" autocomplete="off">
+  <p class="hint">
+    Base URL of your MeTube instance (the extension POSTs to <code>&lt;url&gt;/add</code>).
+    Saving will ask permission to reach that host.
+  </p>
+
+  <button id="save">Save</button>
+  <span id="status"></span>
+
+  <script src="options.js"></script>
+</body>
+</html>

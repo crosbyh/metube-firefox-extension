@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Send to MeTube",
+  "version": "1.1",
+  "description": "Right-click a page, link, or video to send it to your MeTube instance for download.",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "metube-sender@armsaw.net",
+      "strict_min_version": "115.0"
+    }
+  },
+
+  "permissions": [
+    "contextMenus",
+    "notifications",
+    "storage"
+  ],
+
+  "optional_host_permissions": [
+    "*://*/*"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  }
+}
